@@ -17,10 +17,10 @@ namespace firststeplocal.Controllers
             this._favoribu_merveContext = favoribu_merveContext;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var test = _favoribu_merveContext.Genders.First();
-            return View(test);
+            var favoribu_merveContext = _favoribu_merveContext.Products.Include(p => p.Category).Include(p => p.Gender);
+            return View(await favoribu_merveContext.ToListAsync());
         }
 
         public IActionResult Privacy()

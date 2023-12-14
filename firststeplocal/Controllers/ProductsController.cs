@@ -19,11 +19,33 @@ namespace firststeplocal.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+
+
+        public async Task<IActionResult> Index(int? kategoriId1, int? kategoriId2)
         {
-            var favoribu_merveContext = _context.Products.Include(p => p.Category).Include(p => p.Gender);
-            return View(await favoribu_merveContext.ToListAsync());
+            IQueryable<Product> productsQuery = _context.Products;
+
+            // Filter based on kategoriId1
+            if (kategoriId1.HasValue && kategoriId1.Value != 0)
+            {
+                productsQuery = productsQuery.Where(k => k.CategoryId == kategoriId1.Value);
+            }
+
+            // Filter based on kategoriId2
+            if (kategoriId2.HasValue && kategoriId2.Value != 0)
+            {
+                productsQuery = productsQuery.Where(k => k.CategoryId == kategoriId2.Value);
+            }
+
+            var products = await productsQuery.ToListAsync();
+
+            // Distinct SelectList for both dropdowns
+            ViewBag.Kategoriler1 = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+
+            return View(products);
         }
+
+
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -163,6 +185,12 @@ namespace firststeplocal.Controllers
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+
+        public int? getId()
+        {
+            return int.Parse(RouteData.Values["id"]?.ToString() ?? "0");
         }
 
         private bool ProductExists(int id)

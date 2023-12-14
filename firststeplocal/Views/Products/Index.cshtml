@@ -4,92 +4,80 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="container pb-5"> 
+<div class="row">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Stock)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Number)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Color)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsHome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Stock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Image)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Number)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Color)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsHome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Gender.GenderId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="col-md-3">
+
+            <form asp-action="Index" method="get">
+
+                <ul class="list-group">
+                    @foreach (var kategori in ViewBag.Kategoriler1 as SelectList)
+                    {
+                        var isSelected = kategori.Value.Equals(ViewContext.HttpContext.Request.Query["kategoriId1"].FirstOrDefault());
+                        <button type="submit" name="kategoriId1" value="@kategori.Value" class="list-group-item @(isSelected ? "active" : "")">
+                            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                            @kategori.Text
+                        </button>
+                    }
+
+                    <button type="submit" name="kategoriId1" value="" class="list-group-item @(ViewContext.HttpContext.Request.Query["kategoriId1"] == "" ? "active" : "")">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                        Tüm Kategoriler
+                    </button>
+                </ul>
+
+            </form>
+
+    </div>
+
+        <div class="col-md-9">
+
+             @if (Model.Count() == 0)
+            {
+                <div class="alert alert-warning" role="alert">
+                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                    Bu kategoride bir ürün bulunamadı.
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    <i class="fa fa-check-square" aria-hidden="true"></i>
+                    <strong>@Model.Count() adet</strong> ürün bulundu.
+                </div>
+            }
+
+            <div class="row">
+            @foreach (var product in Model)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                            <img class="card-img-top" src="/lib/assets/@product.Image" alt="@product.Name">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <a href="/Products/Details/@product.ProductId"> @product.Name</a>
+                            </h4>
+                            <p class="card-text pt-2 description">
+                                @product.Description
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted product-price">
+                                <i class="fa fa-try" aria-hidden="true"></i>
+                                @product.Price
+                            </small>
+                                <a href="/Products/Details/@product.CategoryId" class="btn btn-default btn-sm float-right">
+                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                Ürünü incele
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+            </div>
+        </div>
+
+
+    </div>
+</div>

@@ -1,9 +1,82 @@
-﻿@model  firststeplocal.Models.Gender
+﻿@model IEnumerable<firststeplocal.Models.Product>
 @{
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    .jumbotron {
+        background-image: url("../img/bg.jpg");
+        background-size: cover;
+        height: 100%;
+    }
+
+    .card-title {
+        font-size: 16px;
+        font-weight: 400;
+        color: #484848;
+        line-height: 1.35em;
+        height: 34px;
+    }
+
+    .product-price {
+        color: #414141;
+        font-weight: 700;
+        font-size: 17px;
+    }
+
+    #product-details h1 {
+        font-size: 20px;
+        font-weight: 700;
+    }
+</style>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome @Model.GenderId</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <div class="jumbotron">
+        <div class="container">
+            <p style=" margin: 50px"</p>
+
+            <h1 class="display-3">Hello, world!</h1>
+            <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+            <hr class="my-4">
+            <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+            <p class="lead">
+                <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="container pb-5">
+        <div class="row">
+
+    @foreach (var product in Model)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                        <img class="card-img-top" src="~/lib/assets/@product.Image" alt="@product.Name">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="/Products/Details/@product.ProductId"> @product.Name</a>
+                    </h4>
+                    <p class="card-text pt-2 description">
+                        @product.Description
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted product-price">
+                        <i class="fa fa-try" aria-hidden="true"></i>
+                        @product.Price
+                    </small>
+                            <a href="/Products/Details/@product.ProductId" class="btn btn-default btn-sm float-right">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                        Ürünü incele
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+    </div>
+    </div>
+
 </div>
+
